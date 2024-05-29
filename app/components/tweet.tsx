@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import { getTweet } from 'react-tweet/api';
+import type { TwitterComponents } from 'react-tweet';
 import { Suspense } from 'react';
 import {
   TweetSkeleton,
@@ -7,6 +9,11 @@ import {
   type TweetProps,
 } from 'react-tweet';
 import './tweet.css';
+
+const components: TwitterComponents = {
+  AvatarImg: (props) => <Image {...props} />,
+  MediaImg: (props) => <Image {...props} fill />,
+};
 
 const TweetContent = async ({ id, components, onError }: TweetProps) => {
   let error;
@@ -36,7 +43,7 @@ export async function TweetComponent({ id }: { id: string }) {
     <div className="tweet my-6">
       <div className={`flex justify-center`}>
         {/* <Suspense fallback={<TweetSkeleton />}> */}
-        <ReactTweet id={id} />
+        <ReactTweet id={id} components={components} />
         {/* </Suspense> */}
       </div>
     </div>
