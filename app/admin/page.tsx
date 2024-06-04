@@ -1,4 +1,4 @@
-import { auth } from 'app/auth';
+import { getSession } from 'app/auth';
 import { getGuestbookEntries } from 'app/db/queries';
 import { redirect } from 'next/navigation';
 import Form from './form';
@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 export default async function GuestbookPage() {
-  let session = await auth();
+  let session = await getSession();
   if (session?.user?.email !== 'me@leerob.io') {
     redirect('/');
   }

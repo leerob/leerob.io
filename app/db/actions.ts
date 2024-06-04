@@ -1,9 +1,12 @@
 'use server';
 
-import { auth } from 'app/auth';
-import { type Session } from 'next-auth';
+import { getSession } from 'app/auth';
 import { sql } from './postgres';
-import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
+import {
+  revalidatePath,
+  unstable_noStore as noStore,
+  revalidateTag,
+} from 'next/cache';
 
 export async function increment(slug: string) {
   noStore();
@@ -15,19 +18,15 @@ export async function increment(slug: string) {
   `;
 }
 
-async function getSession(): Promise<Session> {
-  let session = await auth();
-  if (!session || !session.user) {
-    throw new Error('Unauthorized');
-  }
-
-  return session;
-}
-
 export async function saveGuestbookEntry(formData: FormData) {
   let session = await getSession();
   let email = session.user?.email as string;
   let created_by = session.user?.name as string;
+
+  console.log('session', session);
+  console.log('email', email);
+  console.log('created_by', created_by);
+  return;
 
   if (!session.user) {
     throw new Error('Unauthorized');
@@ -77,6 +76,5 @@ export async function deleteGuestbookEntries(selectedEntries: string[]) {
     WHERE id = ANY(${arrayLiteral}::int[])
   `;
 
-  revalidatePath('/admin');
-  revalidatePath('/guestbook');
+  revalidateTag('guestbook');
 }
