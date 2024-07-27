@@ -1,21 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
-import { saveGuestbookEntry } from '../db/actions';
+import { saveGuestbookEntry } from 'app/db/actions';
 import { useFormStatus } from 'react-dom';
 
 export default function Form() {
-  const formRef = useRef<HTMLFormElement>(null);
-
   return (
-    <form
-      className="relative max-w-[500px]"
-      ref={formRef}
-      action={async (formData) => {
-        await saveGuestbookEntry(formData);
-        formRef.current?.reset();
-      }}
-    >
+    <form className="relative max-w-[500px]" action={saveGuestbookEntry}>
       <input
         aria-label="Your message"
         placeholder="Your message..."

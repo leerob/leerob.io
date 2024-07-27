@@ -80,16 +80,21 @@ export const getVercelYouTubeSubs = cache(
   }
 );
 
-export async function getGuestbookEntries() {
-  if (!process.env.POSTGRES_URL) {
-    return [];
-  }
+export const getGuestbookEntries = cache(
+  async () => {
+    if (!process.env.POSTGRES_URL) {
+      return [];
+    }
 
-  noStore();
-  return sql`
-    SELECT id, body, created_by, updated_at
-    FROM guestbook
-    ORDER BY created_at DESC
-    LIMIT 100
-  `;
-}
+    return sql`
+      SELECT id, body, created_by, updated_at
+      FROM guestbook
+      ORDER BY created_at DESC
+      LIMIT 100
+    `;
+  },
+  ['guestbook'],
+  {
+    tags: ['guestbook'],
+  }
+);
