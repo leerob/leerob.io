@@ -1,0 +1,8 @@
+## Interface: 120007,120010
+## Title: EllesmereUI 汉化
+## Notes: EllesmereUI 独立汉化插件
+## Author: AI+人工
+## Version: 1.0
+## Dependencies: EllesmereUI
+
+EllesmereUI_zhCN.lua
